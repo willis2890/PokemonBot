@@ -218,6 +218,7 @@ def fishName(message):
     s = 'Fishy: ' + fish
     print(s.center(width, ' '))
 
+last_message_time = time.time()
 
 while True:
     event = recieve_json_response(ws)
@@ -226,6 +227,7 @@ while True:
         if event['d']['channel_id'] == channel_id and event['d']['author']['username'] == 'PokéMeow':
             #DUP MESSAGE CHECKER AND FISH CHECKER
             message_id = event['d']['id']
+            last_message_time = time.time()
             if message_id in seen_message_ids:
                 message = event['d']['embeds'][0]['description']
                 if "bite" in message:
@@ -281,8 +283,10 @@ while True:
             if len(seen_message_ids) > max_message_ids:
                 seen_message_ids.clear()
                 print("DELETED MESSAGES")
-
-            
+            else:
+                pass
+        if time.time() - last_message_time >= 15:
+            print('testing point!')
         op_code = event('op')
         if op_code == 11:
             print('heartbeat received')
